@@ -1,50 +1,46 @@
 'use client'; // Needed for state and event handling
 
-import React, { useState } from 'react';
-// Import shadcn components later (e.g., Select)
+import React from 'react'; // Removed useState as state is managed by parent
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select" // Import shadcn Select components
 
-// No props needed for now, so remove the interface
-// interface LanguageSelectorProps {
-// }
+// Define props for the component
+interface LanguageSelectorProps {
+    value: string; // Current selected value
+    onValueChange: (value: string) => void; // Callback function
+}
 
-const LanguageSelector: React.FC = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
-
+const LanguageSelector: React.FC<LanguageSelectorProps> = ({ value, onValueChange }) => {
   // Placeholder language options
   const languages = [
     { value: 'es', label: 'Spanish' },
     { value: 'fr', label: 'French' },
     { value: 'de', label: 'German' },
+    { value: 'ja', label: 'Japanese' }, // Added more options
+    { value: 'it', label: 'Italian' },
     // Add more languages as needed
   ];
 
-  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLanguage(event.target.value);
-    // Add logic to handle language selection (e.g., update global state, navigate)
-    console.log('Selected language:', event.target.value);
-  };
+  // No internal state or handler needed now, parent controls it
 
   return (
-    <div>
-      <label htmlFor="language-select" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-        Select a language:
-      </label>
-      {/* Basic HTML select for now, replace with shadcn component later */}
-      <select
-        id="language-select"
-        value={selectedLanguage}
-        onChange={handleLanguageChange}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      >
-        <option value="" disabled>Choose a language</option>
+    <Select onValueChange={onValueChange} value={value}>
+      <SelectTrigger className="w-[280px]">
+        <SelectValue placeholder="Choose a language to learn" />
+      </SelectTrigger>
+      <SelectContent>
         {languages.map((lang) => (
-          <option key={lang.value} value={lang.value}>
+          <SelectItem key={lang.value} value={lang.value}>
             {lang.label}
-          </option>
+          </SelectItem>
         ))}
-      </select>
-      {selectedLanguage && <p className="mt-2">You selected: {selectedLanguage}</p>}
-    </div>
+      </SelectContent>
+    </Select>
   );
 };
 
